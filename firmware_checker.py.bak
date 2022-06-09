@@ -1,0 +1,71 @@
+import argparse
+import os
+import subprocess
+import re
+import logging
+
+if __name__ == "__main__":
+    
+    parser = argparse.ArgumentParser(description='Enter the path for the file directory')
+    parser.add_argument("-p", "--path", help = "Please enter the path of the directory")
+    args = parser.parse_args()
+
+    # Uncomment before docker push
+    log_file = "/shared/firmware-images/binwalk-result/binwalk.log"
+    # log_file = "binwalk.log"
+    zip_files =[]
+    files_hmap = {}
+    firmware_image_paths = set() # To save 
+
+    extenstions = ["zip", "ZIP"]
+    
+    files = os.listdir(args.path)
+    file_paths = [args.path + "/" + file for file in files]
+
+    test_folder = args.path + "/test-folder/"
+
+    logging.basicConfig(
+        filename=log_file,
+        filemode='a',
+        format='%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s',
+        level=logging.DEBUG,
+        datefmt='%Y-%m-%d %H:%M:%S')
+
+    logging.debug("The path provided in args is: %s", args.path)
+
+    # Create a test folder to add each zip to extract
+    if not os.path.exists(test_folder):
+        os.makedirs(test_folder)
+
+    # Create a hashmap that can be used to fetch back the file name
+    for i, file in enumerate(file_paths):
+        if file.rsplit(".")[-1] in extenstions:
+            zip_files.append(file)
+            files_hmap["_" + files[i] + ".extracted"] = files[i]
+
+    # logging.debug(files_hmap)
+    logging.debug(zip_files)
+    
+    for file in zip_files:
+        os.system("cp %s %s" % (file, test_folder))
+        os.system("cd %s && binwalk -eM %s" % (test_folder ,file))
+        os.system("cd ..")
+        
+        logging.debug("Working on zip file now: %s", file)
+        
+        extracted_file_path = "/".join(file.split("/")[:-1]) + "/test-folder/" + "_" + file.split("/")[-1] + ".extracted"
+        logging.debug("Extracting file now: %s", extracted_file_path)
+
+        for r, d, f in os.walk(extracted_file_path):
+            for file in f:
+                file_path = os.path.join(r, file)
+                logging.debug(file_path)
+
+                if re.match(r'.*root\/bin\/sh.*', file_path) or re.match(r'.*root\/bin\/busybox.*', file_path):
+
+                    for chunk in file_path.split("/"):
+                        if chunk.startswith("_") and chunk.endswith(".extracted") and chunk in files_hmap:
+                            if files_hmap[chunk] not in firmware_image_paths:
+                                logging.debug("Firmware found, path: %s", files_hmap[chunk])
+                            firmware_image_paths.add(files_hmap[chunk])
+

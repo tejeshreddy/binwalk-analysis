@@ -1,0 +1,81 @@
+FROM python:3
+
+
+WORKDIR /binwalk
+ADD . .
+
+
+RUN pip install nose coverage
+RUN pip install pycryptodome
+# RUN apt-get install libqt4-opengl python3-opengl python3-pyqt4 python3-pyqt4.qtopengl python3-numpy python3-scipy python3-pip
+RUN pip3 install pyqtgraph
+RUN pip install capstone
+
+RUN apt-get update && apt-get install -y \
+    mtd-utils \
+    gzip \
+    bzip2 \
+    tar \
+    arj \
+    lhasa \
+    p7zip \
+    p7zip-full \
+    cabextract \
+    cramfsprogs \
+    cramfsswap \
+    squashfs-tools \
+    sleuthkit \
+    default-jdk \
+    lzop \
+    srecord
+
+# Install sasquatch to extract non-standard SquashFS images
+
+RUN apt-get update && apt-get install -y \
+  zlib1g-dev \
+  liblzma-dev \
+  liblzo2-dev
+
+RUN git clone https://github.com/devttys0/sasquatch
+
+# The below one is not providing the necessary output 
+# RUN (cd sasquatch && ./build.sh)
+# RUN ["cd sasquatch && ./build.sh"]
+
+# Install jefferson to extract JFFS2 file systems
+RUN pip install cstruct
+RUN git clone https://github.com/sviehb/jefferson
+# RUN ["cd jefferson && sudo python setup.py install"]
+
+
+# Install ubi_reader to extract UBIFS file systems
+# RUN apt-get update && apt-get install -y \
+#     liblzo2-dev \
+#     python-lzo
+RUN apt-get update && apt-get install -y \
+    liblzo2-dev
+
+RUN apt-get update && apt-get install -y python-is-python3
+
+RUN git clone https://github.com/jrspruitt/ubi_reader
+# RUN (cd ubi_reader && sudo python setup.py install)
+# RUN ["cd ubi_reader && sudo python setup.py install"]
+
+# Install yaffshiv to extract YAFFS file systems
+RUN git clone https://github.com/devttys0/yaffshiv
+# RUN (cd yaffshiv && sudo python setup.py install)
+
+# Install unstuff (closed source) to extract StuffIt archive files
+RUN wget -O - http://downloads.tuxfamily.org/sdtraces/stuffit520.611linux-i386.tar.gz | tar -zxv
+RUN cp bin/unstuff /usr/local/bin/
+
+
+RUN apt-get update && apt-get install -y binwalk
+
+
+# FROM python:3.9.7
+# WORKDIR /binwalk
+# ADD . .
+# RUN chmod +x deps.sh
+# RUN ./deps.sh
+
