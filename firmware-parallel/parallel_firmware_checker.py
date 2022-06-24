@@ -21,6 +21,7 @@ parser.add_argument("-l", "--logpath", help = "Please enter the folder path for 
 args = parser.parse_args()
 
 log_file = os.path.join(args.logpath, str(job_completion_index) + ".log")
+boolean_file = os.path.join(args.logpath, str(job_completion_index) + ".txt")
 
 logging.basicConfig(
         filename=log_file,
@@ -28,7 +29,6 @@ logging.basicConfig(
         format='%(asctime)s.%(msecs)03d %(levelname)s %(module)s : %(message)s',
         level=logging.DEBUG,
         datefmt='%Y-%m-%d %H:%M:%S')
-
 
 def create_test_folder(path):
     test_folder_path = os.path.join(path, "test-folder")
@@ -80,8 +80,6 @@ if __name__ == "__main__":
         # test_folder_path = create_test_folder(args.path)
         # logging.debug("Folder path: %s", test_folder_path)
 
-
-        
         # logging.debug("Extracted Folder Path: %s", extracted_folder_path)
 
         move_zip_file_to_docker_container(processing_file_name)
@@ -99,10 +97,12 @@ if __name__ == "__main__":
 
         if is_binary_file(extracted_folder_path):
             logging.debug("%s is a firmware image", extracted_folder_path)
+            
+            with open(boolean_file, "w") as fp:
+                fp.write(processing_file_path)
+            
         else:
             logging.debug("%s is not a firmware image", extracted_folder_path)
-
-        time.sleep(100)
 
     except Exception as Argument:
         logging.exception("Error has occured, log message below:")
