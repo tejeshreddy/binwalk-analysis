@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: Job
+metadata: 
+  name: binwalkparallel
+spec: 
+  completionMode: Indexed
+  completions: 349
+  parallelism: 349
+  template: 
+    spec: 
+      containers: 
+        - image: "tejeshreddy/binwalkparallel:tenda"
+          imagePullPolicy: Always
+          name: binwalkparallel
+          resources: 
+            limits: 
+              cpu: "1"
+              memory: 64Gi
+            requests: 
+              cpu: "0.5"
+              memory: 16Gi
+          volumeMounts: 
+            - mountPath: /shared
+              name: nfs-shared
+      restartPolicy: Never
+      volumes: 
+        - name: nfs-shared
+          persistentVolumeClaim: 
+            claimName: nfs

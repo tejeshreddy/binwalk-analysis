@@ -1,3 +1,10 @@
+"""
+Commands:
+
+dlink: python3 path_file_generator.py -p /tank/kubernetes/firmware-images/validset/dlink_latest -c dlink
+tenda: python3 path_file_generator.py -p /shared/firmware-images/tenda -c tenda
+dlink-legacy: python3 path_file_generator.py -p /shared/firmware-images/dlink/dlink-legacy -c dlink_legacy
+"""
 import argparse
 import os
 import subprocess
@@ -6,7 +13,7 @@ import logging
 import json
 
 
-extenstions = ["zip", "ZIP"]
+exclusion_extenstions = ["pdf"]
 binwalk_folder = "/shared/firmware-images/binwalk-result"
 
 parser = argparse.ArgumentParser(description='Enter the path for the file directory')
@@ -21,7 +28,7 @@ def list_zip_files(path):
     files = [path + "/" + file for file in files]
 
     for file in files:
-        if file.rsplit(".")[-1] in extenstions:
+        if (file.rsplit(".")[-1]).lower() not in exclusion_extenstions:
             zip_files.append(file)
     return zip_files
 
