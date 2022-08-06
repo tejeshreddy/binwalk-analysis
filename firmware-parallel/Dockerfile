@@ -24,8 +24,12 @@ RUN python3 -m pip install git+https://github.com/ReFirmLabs/binwalk@772f271
 
 WORKDIR /binwalkparallel
 
-ADD dlink.json .
-
 ADD parallel_firmware_checker.py .
 
-CMD ["python3", "parallel_firmware_checker.py", "-p", "/shared/firmware-images/tenda", "-c", "tenda", "-l", "/shared/firmware-images/binwalk-result/tenda-logs"]
+# CMD ["python3", "parallel_firmware_checker.py", "-p", "/shared/firmware-images/netgear", "-c", "netgear", "-l", "/shared/firmware-images/binwalk-result/netgear-logs"]
+# CMD ["python3", "parallel_firmware_checker.py", "-p", "/shared/firmware-images/dlink", "-c", "dlink", "-l", "/shared/firmware-images/binwalk-result/dlink-logs"]
+# CMD ["python3", "parallel_firmware_checker.py", "-p", "/shared/firmware-images/tenda", "-c", "tenda", "-l", "/shared/firmware-images/binwalk-result/tenda-logs"]
+# CMD ["python3", "parallel_firmware_checker.py", "-p", "/shared/firmware-images/tplink", "-c", "tplink", "-l", "/shared/firmware-images/binwalk-result/tplink-logs"]
+# CMD ["python3", "parallel_firmware_checker.py", "-p", "/shared/firmware-images/trendnet", "-c", "trendnet", "-l", "/shared/firmware-images/binwalk-result/trendnet-logs"]
+CMD ["python3", "parallel_firmware_checker.py", "-p", "/shared/firmware-images/asus", "-c", "asus", "-l", "/shared/firmware-images/binwalk-result/asus-logs"]
+

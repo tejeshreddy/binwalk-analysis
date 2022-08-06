@@ -1,9 +1,13 @@
 """
 Commands:
 
-dlink: python3 path_file_generator.py -p /tank/kubernetes/firmware-images/validset/dlink_latest -c dlink
+dlink: python3 path_file_generator.py -p /tank/kubernetes/firmware-images/dlink -c dlink
 tenda: python3 path_file_generator.py -p /shared/firmware-images/tenda -c tenda
 dlink-legacy: python3 path_file_generator.py -p /shared/firmware-images/dlink/dlink-legacy -c dlink_legacy
+netgear: python3 path_file_generator.py -p /shared/firmware-images/netgear -c netgear
+tplink: python3 path_file_generator.py -p /shared/firmware-images/tplink -c tplink
+trendnet: python3 path_file_generator.py -p /shared/firmware-images/trendnet -c trendnet
+asus: python3 path_file_generator.py -p /shared/firmware-images/asus -c asus
 """
 import argparse
 import os

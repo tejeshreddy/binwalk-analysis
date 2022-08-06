@@ -41,4 +41,31 @@ docker buildx build --platform linux/amd64 -t tejeshreddy/binwalkparallel:dlink 
 docker build -t tejeshreddy/binwalkparallel:tenda .
 docker image push tejeshreddy/binwalkparallel:tenda
 docker buildx build --platform linux/amd64 -t tejeshreddy/binwalkparallel:tenda --push .
+
+docker build -t tejeshreddy/binwalkparallel:netgear .
+docker image push tejeshreddy/binwalkparallel:netgear
+docker buildx build --platform linux/amd64 -t tejeshreddy/binwalkparallel:netgear --push .
+
+docker build -t tejeshreddy/binwalkparallel:tplink .
+docker image push tejeshreddy/binwalkparallel:tplink
+docker buildx build --platform linux/amd64 -t tejeshreddy/binwalkparallel:tplink --push .
+
+docker build -t tejeshreddy/binwalkparallel:trendnet .
+docker image push tejeshreddy/binwalkparallel:trendnet
+docker buildx build --platform linux/amd64 -t tejeshreddy/binwalkparallel:trendnet --push .
+
+docker build -t tejeshreddy/binwalkparallel:asus .
+docker image push tejeshreddy/binwalkparallel:asus
+docker buildx build --platform linux/amd64 -t tejeshreddy/binwalkparallel:asus --push .
+
+```
+
+
+Renaming the files
+```python
+import re
+import os
+
+for filename in os.listdir("."):
+    os.rename(filename, re.sub('[^0-9a-zA-Z/.]+', '_', filename))
 ```

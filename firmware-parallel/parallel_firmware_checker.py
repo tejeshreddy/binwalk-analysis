@@ -100,7 +100,7 @@ if __name__ == "__main__":
             
             with open(boolean_file, "w") as fp:
                 fp.write(processing_file_path)
-            
+                fp.write("\n")
         else:
             logging.debug("%s is not a firmware image", extracted_folder_path)
 

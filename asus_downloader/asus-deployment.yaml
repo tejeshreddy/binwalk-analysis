@@ -1,24 +1,24 @@
 apiVersion: batch/v1
 kind: Job
 metadata: 
-  name: binwalkparallel
+  name: asusdownloader
 spec: 
   completionMode: Indexed
-  completions: 1785
+  completions: 1784
   parallelism: 500
   template: 
     spec: 
       containers: 
-        - image: "tejeshreddy/binwalkparallel:asus"
+        - image: "tejeshreddy/asusdownloader:v1"
           imagePullPolicy: Always
-          name: binwalkparallel
+          name: asusdownloader
           resources: 
             limits: 
               cpu: "1"
               memory: 64Gi
             requests: 
               cpu: "0.5"
-              memory: 16Gi
+              memory: 4Gi
           volumeMounts: 
             - mountPath: /shared
               name: nfs-shared
